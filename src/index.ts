@@ -5,12 +5,17 @@ import express, { Express, Request, Response } from "express";
 // import morgan from "morgan";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import config from "config";
+import log from "./utils/logger";
+import router from "./routes/root";
 
 dotenv.config();
 
 const app: Express = express();
-const port = process.env.PORT || 8000;
-const dbUri = "mongodb://localhost/superDao";
+const port = process.env.PORT || config.get("port");
+const dbUri = config.get<string>("dbUri");
+
+app.use(router);
 
 // add middlewares
 // app.use(helmet());
@@ -26,10 +31,10 @@ mongoose.connect(dbUri, {}, (err) => {
 	if (err) {
 		console.log(err, "Database connection error");
 	} else {
-		console.log("Database connected");
+		log.info("Connected to the Database");
 	}
 });
 
 app.listen(port, () => {
-	console.log(`The application is listening on port ${port}`);
+	log.info(`The application is listening on port ${port}`);
 });

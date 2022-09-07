@@ -10,10 +10,14 @@ const express_1 = __importDefault(require("express"));
 // import morgan from "morgan";
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const config_1 = __importDefault(require("config"));
+const logger_1 = __importDefault(require("./utils/logger"));
+const root_1 = __importDefault(require("./routes/root"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const port = process.env.PORT || 8000;
-const dbUri = "mongodb://localhost/superDao";
+const port = process.env.PORT || config_1.default.get("port");
+const dbUri = config_1.default.get("dbUri");
+app.use(root_1.default);
 // add middlewares
 // app.use(helmet());
 // app.use(compression());
@@ -27,9 +31,9 @@ mongoose_1.default.connect(dbUri, {}, (err) => {
         console.log(err, "Database connection error");
     }
     else {
-        console.log("Database connected");
+        logger_1.default.info("Connected to the Database");
     }
 });
 app.listen(port, () => {
-    console.log(`The application is listening on port ${port}`);
+    logger_1.default.info(`The application is listening on port ${port}`);
 });
