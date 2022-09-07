@@ -7,6 +7,7 @@ require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 8000;
+const dbUri = "mongodb://localhost/superDao";
 
 // add middlewares
 app.use(helmet());
@@ -15,9 +16,9 @@ app.use(cors());
 app.use(morgan("dev"));
 
 app.get("/", (req, res) => {
-  res.send("Hello World");
+	res.send("Hello World");
 });
 
 app.listen(port, () => {
-  console.log("The application is listening on port 8000");
+	console.log("The application is listening on port 8000");
 });
